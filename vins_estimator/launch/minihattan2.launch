@@ -1,0 +1,62 @@
+<launch>
+    <arg name="top_bag" default="/home/aneesh/UbuntuStorage/Airsim-Recording-Scripts/offsetSquareSine/remadeFull1.bag"/>
+    <arg name="inner_bag" default="/home/aneesh/UbuntuStorage/Airsim-Recording-Scripts/offsetSquareSine/remadeFull2_offset.bag"/>
+    <arg name="config_path" default="$(find vins_estimator)/../config/minihattan/minihattan_config_d1.yaml"/>
+    <!-- <arg name="minihatan_bag" default="/home/aneesh/UbuntuStorage/RRC/datasets/SmallSquare/14secs.bag"/> -->
+
+    <!-- Set transforms to camera1 and camera2 for d1 and d2 respectively to see the visualisation in RVIZ -->
+
+                                        <!-- Dense PCD 1 -->
+    <group ns="vins_1">
+        <node pkg="rosbag" type="play" name="player" output="log" args="$(arg top_bag) /d1/imu:=imu /d1/image:=image /d1/depth:=depth" />
+        <param name="config_file" type="string" value="$(find feature_tracker)/../config/minihattan/minihattan_config.yaml" />
+        <param name="vins_folder" type="string" value="$(find feature_tracker)/../config/../" />
+        <param name="agent_num" type="int" value="1" />
+        <node name="feature_tracker" pkg="feature_tracker" type="feature_tracker" output="log"/>
+        <node name="vins_estimator" pkg="vins_estimator" type="vins_estimator" output="log"/>
+
+        <node name="pcd_publisher_node_1" pkg="pcd_publisher" type="pcd_publisher" output="log">
+            <param name="config_file" type="string" value="$(arg config_path)" />
+            <param name="tf_prefix" value="camera1" />
+            <param name="DEPTH_IMAGE_TOPIC" value="/vins_1/depth" />
+            <param name="RGB_IMAGE_TOPIC" value="/vins_1/image" />
+        </node>
+    </group>
+
+
+
+                                        <!-- Dense PCD 2 -->
+
+    <group ns="vins_2">
+        <node pkg="rosbag" type="play" name="player" output="log" args="$(arg inner_bag) /d1/imu:=imu /d1/image:=image /d1/depth:=depth" />
+        <param name="config_file" type="string" value="$(find feature_tracker)/../config/minihattan/minihattan_config.yaml" />
+        <param name="vins_folder" type="string" value="$(find feature_tracker)/../config/../" />
+        <param name="agent_num" type="int" value="2" />
+        <node name="feature_tracker" pkg="feature_tracker" type="feature_tracker" output="log"/>
+        <node name="vins_estimator" pkg="vins_estimator" type="vins_estimator" output="log"/>
+
+        <node name="pcd_publisher_node_2" pkg="pcd_publisher" type="pcd_publisher" output="log">
+            <param name="config_file" type="string" value="$(arg config_path)" />
+            <param name="tf_prefix" value="camera2" /> 
+            <param name="DEPTH_IMAGE_TOPIC" value="/vins_2/depth" />
+            <param name="RGB_IMAGE_TOPIC" value="/vins_2/image" />
+        </node>
+    </group>
+
+
+                                        <!-- RVIZ -->
+
+    <node name="pose_graph" pkg="pose_graph" type="pose_graph" output="screen">
+        <param name="visualization_shift_x" type="int" value="0" />
+        <param name="visualization_shift_y" type="int" value="0" />
+        <param name="skip_cnt" type="int" value="0" />
+        <param name="skip_dis" type="double" value="0" />
+        <param name="pose_graph_save_path" type="string" value="/home/aneesh/UbuntuStorage/RRC/ws/covins_ws/output/save_path" />
+        <param name="pose_graph_result_path" type="string" value="/home/aneesh/UbuntuStorage/RRC/ws/covins_ws/output/result_path" />
+    </node>
+
+    <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find vins_estimator)/../config/multi_agent_rviz.rviz" />
+
+
+</launch>
+
