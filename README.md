@@ -1,4 +1,17 @@
-# Co-VINS
+## This repo contains code to demonstrate and visualise the multi agent capabilities of Co-VINS
+To visualise a point cloud:
+
+1. Run the rosbag command in `visualisation_scripts/getPathPcdBag.sh`
+2. Run CoVINS on a recorded bag file using `roslaunch vins_estimator <launch file name>` 
+3. Follow the instructions in `visualisation_scripts/vis.ipynb` to visualise and save the reconstruction.
+
+An example of the bag file obtained after step 2 can be found at: 
+Examples of multi-drone path optimisation can be found in the example launch files `A3_swarm.launch` and `euroc_multi_agent.launch`
+
+The rest of this README contains the original CoVINS instructions to set up CoVINS
+
+
+### Co-VINS
 ## Collaborative Localization for Multiple Monocular Visual-Inertial Systems
 
 Co-VINS a collaborative localization framework for multiple robots using monocular visual-inertial systems (VINS). Unlike traditional swarm applications which rely on external position equipment (GPS or Motion Capture System), our system achieves globally consistent localization based on internal sensors (onboard camera and IMU). Each robot is equipped with one camera and one IMU. It estimates own pose onboard and sends visual information to a centralized ground station. The ground station collects collaborative information from all robots, and maintains a globally consistent coordinate by pose graph optimization. Then the global localization is feedbacked to each robot for global control purpose. The ground station not only aligns all robots in a global coordinate, but also correct accumulated drifts for each robot. Co-VINS is an extension of [VINS-Mono](https://github.com/HKUST-Aerial-Robotics/VINS-Mono).
