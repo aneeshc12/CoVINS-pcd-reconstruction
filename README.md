@@ -5,7 +5,7 @@ To visualise a point cloud:
 2. Run CoVINS on a recorded bag file using `roslaunch vins_estimator <launch file name>` 
 3. Follow the instructions in `visualisation_scripts/vis.ipynb` to visualise and save the reconstruction.
 
-An example of the bag file obtained after step 2 can be found at: 
+An example of the bag file obtained after step 2 can be found at: `https://iiitaphyd-my.sharepoint.com/:u:/g/personal/aneesh_c_research_iiit_ac_in/ETearGJXY01Csr8P7jfzFc8Bs4WXQ8s0dl9aIF-xq0JFwQ?e=GdAUIy`
 Examples of multi-drone path optimisation can be found in the example launch files `A3_swarm.launch` and `euroc_multi_agent.launch`
 
 The rest of this README contains the original CoVINS instructions to set up CoVINS
